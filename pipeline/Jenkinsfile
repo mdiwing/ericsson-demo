@@ -19,7 +19,6 @@ node() {
   }
 
   stage("Deploy API in Dev") {
-    def envName = params.DEV_PROJECT
 
     // create the ThreescaleService object from your API metadata manifest:
     service = toolbox.prepareThreescaleService(
@@ -27,7 +26,7 @@ node() {
         environment: [ baseSystemName: params.API_BASE_SYSTEM_NAME,
                        publicBasePath: params.PUBLIC_BASE_PATH,
 		       privateBaseUrl: params.DEV_PRIVATE_BASE_URL,
-		       environmentName:  envName ],
+		       environmentName: params.DEV_PROJECT ],
         toolbox: [ openshiftProject: params.NAMESPACE,
                    destination: params.TARGET_INSTANCE_DEV,
                    image: params.TOOLBOX_IMAGE_REGISTRY,
@@ -35,12 +34,12 @@ node() {
                    secretName: params.SECRET_NAME],
         service: [:],
         applications: [
-            [ name: "petstore-app", description: "This is used for testing the Petstore API", plan: "petstore-app-test", account: params.DEV_DEVELOPER_ACCOUNT_ID ]
+            [ name: params.APPLICATION_NAME + "-app", description: "This is used for testing the API", plan: params.APPLICATION_NAME + "-app-dev", account: params.DEV_DEVELOPER_ACCOUNT_ID ]
         ],
         applicationPlans: [
-          [ systemName: "petstore-test", name: "Petstore Test", defaultPlan: true, published: true ],
+          [ systemName: params.APPLICATION_NAME + "-dev", name: "Test", defaultPlan: true, published: true ],
           [ systemName: "silver", name: "Silver" ],
-          [ artefactFile: "application-plan/config.yaml"],
+          [ artefactFile: params.APPLICATION_PLAN],
         ]
     )
 
@@ -74,16 +73,13 @@ node() {
 
   stage("Deploy API in Prod") {
 
-    def envName = params.PROD_PROJECT
-    def backend_service = params.PROD_PRIVATE_BASE_URL
-
     // Prepare
     service = toolbox.prepareThreescaleService(
         openapi: [filename: params.OPENAPI_SPECIFICATION_FILE ],
         environment: [ baseSystemName: params.API_BASE_SYSTEM_NAME,
-                       publicBasePath: "/open-data/",
-		       privateBaseUrl: backend_service,
-		       environmentName:  envName ],
+                       publicBasePath: params.PUBLIC_BASE_PATH,
+		       privateBaseUrl: params.PROD_PRIVATE_BASE_URL,
+		       environmentName:  params.PROD_PROJECT ],
         toolbox: [ openshiftProject: params.NAMESPACE,
                    destination: params.TARGET_INSTANCE_PROD,
                    image: params.TOOLBOX_IMAGE_REGISTRY,
@@ -91,12 +87,12 @@ node() {
                    secretName: params.SECRET_NAME],
         service: [:],
         applications: [
-            [ name: "petstore-app", description: "This is used for testing the Petstore API", plan: "petstore-app-test", account: params.PROD_DEVELOPER_ACCOUNT_ID ]
+            [ name: params.APPLICATION_PLAN + "-app", description: "This is used for production API", plan: params.APPLICATION_NAME + "-app-prod", account: params.PROD_DEVELOPER_ACCOUNT_ID ]
         ],
         applicationPlans: [
-          [ systemName: "petstore-test", name: "Petstore Test", defaultPlan: true, published: true ],
+          [ systemName: params.APPLICATION_NAME + "-prod", name: "Production", defaultPlan: true, published: true ],
           [ systemName: "silver", name: "Silver" ],
-          [ artefactFile: "https://raw.githubusercontent.com/mdiwing/ericsson-demo/master/application-plan/config.yaml"],
+          [ artefactFile: params.APPLICATION_PLAN],
         ]
     )
     // Import OpenAPI

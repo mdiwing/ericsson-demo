@@ -1,30 +1,18 @@
-kind: "BuildConfig"
-apiVersion: "v1"
-metadata:
-  name: "petstore-pipeline"
-spec:
-  source:
-    git:
-      uri: "https://github.com/mdiwing/ericsson-demo.git"
-  strategy:
-    jenkinsPipelineStrategy:
-      jenkinsfilePath: pipeline/Jenkinsfile
-
 apiVersion: template.openshift.io/v1
 kind: Template
 labels:
-  template: petstore-publish-api-pipeline
+  template: threescale-api-publish-pipeline
 metadata:
   annotations:
     description: 3scale API publishing Pipeline
-  name: petstore-publish-api-pipeline
+  name: threescale-api-publish-pipeline
 objects:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
     labels:
-      name: petstore-publish-api-pipeline
-    name: petstore-publish-api-pipeline
+      name: threescale-api-publish-pipeline
+    name: threescale-api-publish-pipeline
   spec:
     output: null
     postCommit: null
@@ -75,6 +63,8 @@ objects:
           value: ${APPLICATION_NAME}
         - name: OPENAPI_SPECIFICATION_FILE
           value: ${OPENAPI_SPECIFICATION_FILE}
+        - name: APPLICATION_PLAN
+          value: ${APPLICATION_PLAN}
         - name: TOOLBOX_IMAGE_REGISTRY
           value: ${TOOLBOX_IMAGE_REGISTRY}
 parameters:
@@ -91,6 +81,8 @@ parameters:
   value: petstore
   required: true
 - name: DEV_PRIVATE_BASE_URL
+  value: "http://petstore-dev/petstore"
+  required: true
 - name: DEV_PROJECT
   required: true
   value: petstore-api-dev
@@ -98,6 +90,8 @@ parameters:
   required: true
   value: petstore-api-test
 - name: PROD_PRIVATE_BASE_URL
+  value: "http://petstore-prod/petstore"
+  required: true
 - name: PROD_PROJECT
   required: true
   value: petstore-api-prod
@@ -126,7 +120,10 @@ parameters:
   required: true
 - name: OPENAPI_SPECIFICATION_FILE
   required: true
-  value: "open-api/petstore-openapi-spec.json"
+  value: "pipeline/openapi-spec.json"
+- name: APPLICATION
+  value: "pipeline/application-plan.yaml"
+  required: true
 - name: TOOLBOX_IMAGE_REGISTRY
   required: true
   value: "registry.redhat.io/3scale-amp2/toolbox-rhel7:3scale2.7"
