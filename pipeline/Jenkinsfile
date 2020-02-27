@@ -37,9 +37,7 @@ node() {
             [ name: params.APPLICATION_NAME + "-app", description: "This is used for testing the API", plan: params.APPLICATION_NAME + "-app-dev", account: params.DEV_DEVELOPER_ACCOUNT_ID ]
         ],
         applicationPlans: [
-          [ systemName: params.APPLICATION_NAME + "-dev", name: "Test", defaultPlan: true, published: true ],
-          [ systemName: "silver", name: "Silver" ],
-          [ artefactFile: params.APPLICATION_PLAN],
+          [ artefactFile: params.APPLICATION_PLAN]
         ]
     )
 
@@ -87,12 +85,10 @@ node() {
                    secretName: params.SECRET_NAME],
         service: [:],
         applications: [
-            [ name: params.APPLICATION_PLAN + "-app", description: "This is used for production API", plan: params.APPLICATION_NAME + "-app-prod", account: params.PROD_DEVELOPER_ACCOUNT_ID ]
+            [ name: params.APPLICATION_NAME + "-app", description: "This is used for production API", plan: params.APPLICATION_NAME + "-app-prod", account: params.PROD_DEVELOPER_ACCOUNT_ID ]
         ],
         applicationPlans: [
-          [ systemName: params.APPLICATION_NAME + "-prod", name: "Production", defaultPlan: true, published: true ],
-          [ systemName: "silver", name: "Silver" ],
-          [ artefactFile: params.APPLICATION_PLAN],
+          [ artefactFile: params.APPLICATION_PLAN]
         ]
     )
     // Import OpenAPI

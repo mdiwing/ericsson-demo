@@ -121,7 +121,7 @@ parameters:
 - name: OPENAPI_SPECIFICATION_FILE
   required: true
   value: "pipeline/openapi-spec.json"
-- name: APPLICATION
+- name: APPLICATION_PLAN
   value: "pipeline/application-plan.yaml"
   required: true
 - name: TOOLBOX_IMAGE_REGISTRY
