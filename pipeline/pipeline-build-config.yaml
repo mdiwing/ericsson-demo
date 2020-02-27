@@ -49,20 +49,12 @@ objects:
           value: ${DEV_PRIVATE_BASE_URL}
         - name: PROD_PRIVATE_BASE_URL
           value: ${PROD_PRIVATE_BASE_URL}
-        - name: DEV_PRODUCTION_PUBLIC_BASE_URL
-          value: ${DEV_PRODUCTION_PUBLIC_BASE_URL}
-        - name: DEV_STAGING_PUBLIC_BASE_URL
-          value: ${DEV_STAGING_PUBLIC_BASE_URL}
-        - name: PROD_PRODUCTION_PUBLIC_BASE_URL
-          value: ${PROD_PRODUCTION_PUBLIC_BASE_URL}
-        - name: PROD_STAGING_PUBLIC_BASE_URL
-          value: ${PROD_STAGING_PUBLIC_BASE_URL}
         - name: API_BASE_SYSTEM_NAME
           value: ${API_BASE_SYSTEM_NAME}
         - name: DEV_PROJECT
           value: ${DEV_PROJECT}
-        - name: TEST_PROJECT
-          value: ${TEST_PROJECT}
+        - name: DEV_PROJECT
+          value: ${DEV_PROJECT}
         - name: PROD_PROJECT
           value: ${PROD_PROJECT}
         - name: IMAGE_NAMESPACE
@@ -92,25 +84,20 @@ parameters:
 - name: GIT_BRANCH
   value: master
   required: true
-- name: DEV_PRIVATE_BASE_URL
+- name: PUBLIC_BASE_PATH
   required: true
   value: "/api"
-- name: PROD_PRIVATE_BASE_URL
-  required: true
-  value: "/api"
-- name: DEV_PRODUCTION_PUBLIC_BASE_URL
-- name: DEV_STAGING_PUBLIC_BASE_URL
-- name: PROD_PRODUCTION_PUBLIC_BASE_URL
-- name: PROD_STAGING_PUBLIC_BASE_URL
 - name: API_BASE_SYSTEM_NAME
   value: petstore
   required: true
+- name: DEV_PRIVATE_BASE_URL
 - name: DEV_PROJECT
   required: true
   value: petstore-api-dev
-- name: TEST_PROJECT
+- name: DEV_PROJECT
   required: true
   value: petstore-api-test
+- name: PROD_PRIVATE_BASE_URL
 - name: PROD_PROJECT
   required: true
   value: petstore-api-prod
