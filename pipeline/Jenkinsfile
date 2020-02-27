@@ -1,0 +1,58 @@
+library identifier: '3scale-toolbox-jenkins@master',
+        retriever: modernSCM([$class: 'GitSCMSource',
+                              remote: 'https://github.com/rh-integration/3scale-toolbox-jenkins.git'])
+
+def service = null
+
+pipeline {
+  stages {
+    stage("Prepare") {
+      service = toolbox.prepareThreescaleService(
+          openapi: [ filename: "petstore-openapi-spec.json" ],
+          environment: [ baseSystemName: "petstore" ],
+          toolbox: [ openshiftProject: "petstore",
+                     destination: "3scale-tenant-groupit",
+                     secretName: "3scale-toolbox-groupit" ],
+          service: [:],
+          applications: [
+              [ name: "petstore-app", description: "This is used for testing the Petstore API", plan: "petstore-app-test", account: "<CHANGE_ME>" ]
+          ],
+          applicationPlans: [
+            [ systemName: "petstore-test", name: "Petstore Test", defaultPlan: true, published: true ],
+            [ systemName: "silver", name: "Silver" ],
+            [ artefactFile: "https://raw.githubusercontent.com/redhatHameed/API-Lifecycle-Mockup/master/testcase-01/plan.yaml"],
+          ]
+      )
+
+      echo "toolbox version = " + service.toolbox.getToolboxVersion()
+    }
+
+    stage("Import OpenAPI") {
+      service.importOpenAPI()
+      echo "Service with system_name ${service.environment.targetSystemName} created !"
+    }
+
+    stage("Create an Application Plan") {
+      service.applyApplicationPlans()
+    }
+
+    stage("Create an Application") {
+      service.applyApplication()
+    }
+
+    stage("Run integration tests") {
+      // To run the integration tests when using APIcast SaaS instances, we need
+      // to fetch the proxy definition to extract the staging public url
+      def proxy = service.readProxy("sandbox")
+      sh """set -e +x
+      curl -f -w "ListBeers: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/api/beer -H 'api-key: ${service.applications[0].userkey}'
+      curl -f -w "GetBeer: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/api/beer/Weissbier -H 'api-key: ${service.applications[0].userkey}'
+      curl -f -w "FindBeersByStatus: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/api/beer/findByStatus/available -H 'api-key: ${service.applications[0].userkey}'
+      """
+    }
+
+    stage("Promote to production") {
+      service.promoteToProduction()
+    }
+  }
+}
