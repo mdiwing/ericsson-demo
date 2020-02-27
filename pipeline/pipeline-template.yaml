@@ -122,7 +122,7 @@ parameters:
   required: true
   value: "pipeline/openapi-spec.json"
 - name: APPLICATION_PLAN
-  value: "pipeline/application-plan.yaml"
+  value: "https://raw.githubusercontent.com/mdiwing/ericsson-demo/master/pipeline/application-plan.yml"
   required: true
 - name: TOOLBOX_IMAGE_REGISTRY
   required: true
