@@ -20,7 +20,7 @@ pipeline {
           applicationPlans: [
             [ systemName: "petstore-test", name: "Petstore Test", defaultPlan: true, published: true ],
             [ systemName: "silver", name: "Silver" ],
-            [ artefactFile: "https://raw.githubusercontent.com/redhatHameed/API-Lifecycle-Mockup/master/testcase-01/plan.yaml"],
+            [ artefactFile: "https://raw.githubusercontent.com/mdiwing/ericsson-demo/master/application-plan/config.yaml"],
           ]
       )
 
@@ -45,9 +45,9 @@ pipeline {
       // to fetch the proxy definition to extract the staging public url
       def proxy = service.readProxy("sandbox")
       sh """set -e +x
-      curl -f -w "ListBeers: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/api/beer -H 'api-key: ${service.applications[0].userkey}'
-      curl -f -w "GetBeer: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/api/beer/Weissbier -H 'api-key: ${service.applications[0].userkey}'
-      curl -f -w "FindBeersByStatus: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/api/beer/findByStatus/available -H 'api-key: ${service.applications[0].userkey}'
+      curl -f -w "GetPet: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/pet/1 -H 'api-key: ${service.applications[0].userkey}'
+      curl -f -w "GetStore: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/store/ -H 'api-key: ${service.applications[0].userkey}'
+      curl -f -w "GetUser: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/user/ -H 'api-key: ${service.applications[0].userkey}'
       """
     }
 
