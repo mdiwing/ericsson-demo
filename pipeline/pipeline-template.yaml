@@ -103,9 +103,8 @@ parameters:
   value: 3scale-tenant-groupit
   required: true  
 - name: TARGET_INSTANCE_PROD
-  value: petstore-prod
+  value: 3scale-tenant-santools
   required: true
-  value: "1"
 - name: DISABLE_TLS_VALIDATION
   value: "yes"
 - name: APPLICATION_NAME
