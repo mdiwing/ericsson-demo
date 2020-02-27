@@ -1,42 +1,70 @@
-library identifier: '3scale-toolbox-jenkins@master',
+#!groovy
+
+// This CI/CD pipeline will execute within the container of a custom Jenkins image that includes the "3scale-toolbox-jenkins" shared library
+// Documentation pertaining to this shared library can be found here:
+//   1)  https://developers.redhat.com/blog/2019/07/31/using-the-3scale-toolbox-jenkins-shared-library/
+//   2)  https://github.com/rh-integration/3scale-toolbox-jenkins/blob/master/README.md
+
+// TO-DO:  Explain why doesn't this groovy functionality just come out of the box with the the 3scale toolbox container image ?
+library identifier: '3scale-toolbox-jenkins@master', 
         retriever: modernSCM([$class: 'GitSCMSource',
-                              remote: 'https://github.com/rh-integration/3scale-toolbox-jenkins.git'])
+                              remote: 'https://github.com/rh-integration/3scale-toolbox-jenkins.git',
+                              traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait']]])
 
 def service = null
 
 node() {
-  stage("Prepare") {
+  stage('Checkout Source') {
+    checkout scm
+  }
+
+  stage("Deploy API in Dev") {
+    def envName = params.TEST_PROJECT
+    def app_name= params.APPLICATION_NAME
+    def backend_service = params.DEV_PRIVATE_BASE_URL
+    def stagingPublicBaseURL = params.DEV_STAGING_PUBLIC_BASE_URL
+    def productionPublicBaseURL = params.DEV_PRODUCTION_PUBLIC_BASE_URL
+
+    // create the ThreescaleService object from your API metadata manifest:
     service = toolbox.prepareThreescaleService(
-        openapi: [ filename: "petstore-openapi-spec.json" ],
-        environment: [ baseSystemName: "petstore" ],
-        toolbox: [ openshiftProject: "petstore",
-                   destination: "3scale-tenant-groupit",
-                   secretName: "3scale-toolbox-groupit" ],
+        openapi: [filename: params.OPENAPI_SPECIFICATION_FILE ],
+        environment: [ baseSystemName: params.API_BASE_SYSTEM_NAME,
+                       publicBasePath: "/open-data/",
+		       privateBaseUrl: backend_service,
+		       stagingPublicBaseURL: stagingPublicBaseURL,
+		       productionPublicBaseURL: productionPublicBaseURL,
+		       environmentName:  envName ],
+        toolbox: [ openshiftProject: params.NAMESPACE,
+                   destination: params.TARGET_INSTANCE_DEV,
+                   image: params.TOOLBOX_IMAGE_REGISTRY,
+                   insecure: params.DISABLE_TLS_VALIDATION == "yes",
+                   secretName: params.SECRET_NAME],
         service: [:],
         applications: [
-            [ name: "petstore-app", description: "This is used for testing the Petstore API", plan: "petstore-app-test", account: "<CHANGE_ME>" ]
+            [ name: "petstore-app", description: "This is used for testing the Petstore API", plan: "petstore-app-test", account: params.DEV_DEVELOPER_ACCOUNT_ID ]
         ],
         applicationPlans: [
           [ systemName: "petstore-test", name: "Petstore Test", defaultPlan: true, published: true ],
           [ systemName: "silver", name: "Silver" ],
-          [ artefactFile: "https://raw.githubusercontent.com/mdiwing/ericsson-demo/master/application-plan/config.yaml"],
+          [ artefactFile: "application-plan/config.yaml"],
         ]
     )
 
-    echo "toolbox version = " + service.toolbox.getToolboxVersion()
-  }
-
-  stage("Import OpenAPI") {
+    // Import OpenAPI
     service.importOpenAPI()
     echo "Service with system_name ${service.environment.targetSystemName} created !"
-  }
 
-  stage("Create an Application Plan") {
+    // Create an Application Plan
     service.applyApplicationPlans()
-  }
 
-  stage("Create an Application") {
+    // Create an Application
     service.applyApplication()
+
+    // Run integration tests
+    runIntegrationTests(service)
+    
+    // Promote to production
+    service.promoteToProduction()
   }
 
   stage("Run integration tests") {
@@ -50,7 +78,53 @@ node() {
     """
   }
 
-  stage("Promote to production") {
+  stage("Deploy API in Prod") {
+
+    def envName = params.PROD_PROJECT
+    def app_name= params.APPLICATION_NAME
+    def backend_service = params.PROD_PRIVATE_BASE_URL
+    def stagingPublicBaseURL = params.PROD_STAGING_PUBLIC_BASE_URL
+    def productionPublicBaseURL = params.PROD_PRODUCTION_PUBLIC_BASE_URL
+
+    // Prepare
+    service = toolbox.prepareThreescaleService(
+        openapi: [filename: params.OPENAPI_SPECIFICATION_FILE ],
+        environment: [ baseSystemName: params.API_BASE_SYSTEM_NAME,
+                       publicBasePath: "/open-data/",
+		       privateBaseUrl: backend_service,
+		       stagingPublicBaseURL: stagingPublicBaseURL,
+		       productionPublicBaseURL: productionPublicBaseURL,
+		       environmentName:  envName ],
+        toolbox: [ openshiftProject: params.NAMESPACE,
+                   destination: params.TARGET_INSTANCE_PROD,
+                   image: params.TOOLBOX_IMAGE_REGISTRY,
+                   insecure: params.DISABLE_TLS_VALIDATION == "yes",
+                   secretName: params.SECRET_NAME],
+        service: [:],
+        applications: [
+            [ name: "petstore-app", description: "This is used for testing the Petstore API", plan: "petstore-app-test", account: params.PROD_DEVELOPER_ACCOUNT_ID ]
+        ],
+        applicationPlans: [
+          [ systemName: "petstore-test", name: "Petstore Test", defaultPlan: true, published: true ],
+          [ systemName: "silver", name: "Silver" ],
+          [ artefactFile: "https://raw.githubusercontent.com/mdiwing/ericsson-demo/master/application-plan/config.yaml"],
+        ]
+    )
+    // Import OpenAPI
+    service.importOpenAPI()
+    echo "Service with system_name ${service.environment.targetSystemName} created !"
+
+    // Create an Application Plan
+    service.applyApplicationPlans()
+
+    // Create an Application
+    service.applyApplication()
+
+    // Run integration tests
+    runIntegrationTests(service)
+
+    // Promote to production
     service.promoteToProduction()
   }
+
 }
