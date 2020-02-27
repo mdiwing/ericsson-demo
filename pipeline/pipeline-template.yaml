@@ -41,8 +41,6 @@ objects:
           value: ${API_BASE_SYSTEM_NAME}
         - name: DEV_PROJECT
           value: ${DEV_PROJECT}
-        - name: DEV_PROJECT
-          value: ${DEV_PROJECT}
         - name: PROD_PROJECT
           value: ${PROD_PROJECT}
         - name: IMAGE_NAMESPACE
@@ -53,16 +51,16 @@ objects:
           value: ${TARGET_INSTANCE_DEV}
         - name: TARGET_INSTANCE_PROD
           value: ${TARGET_INSTANCE_PROD}
-        - name: DEV_DEVELOPER_ACCOUNT_ID
-          value: ${DEV_DEVELOPER_ACCOUNT_ID}
-        - name: PROD_DEVELOPER_ACCOUNT_ID
-          value: ${PROD_DEVELOPER_ACCOUNT_ID}
         - name: DISABLE_TLS_VALIDATION
           value: ${DISABLE_TLS_VALIDATION}
         - name: APPLICATION_NAME
           value: ${APPLICATION_NAME}
         - name: OPENAPI_SPECIFICATION_FILE
           value: ${OPENAPI_SPECIFICATION_FILE}
+        - name: DEV_DEVELOPER_ACCOUNT_ID
+          value: ${DEV_DEVELOPER_ACCOUNT_ID} 
+        - name: PROD_DEVELOPER_ACCOUNT_ID
+          value: ${PROD_DEVELOPER_ACCOUNT_ID}
         - name: APPLICATION_PLAN
           value: ${APPLICATION_PLAN}
         - name: TOOLBOX_IMAGE_REGISTRY
@@ -112,6 +110,12 @@ parameters:
   value: "yes"
 - name: APPLICATION_NAME
   value: "petstore-api"
+  required: true
+- name: DEV_DEVELOPER_ACCOUNT_ID
+  value: "1"
+  required: true
+- name: PROD_DEVELOPER_ACCOUNT_ID
+  value: "1"
   required: true
 - name: OPENAPI_SPECIFICATION_FILE
   required: true

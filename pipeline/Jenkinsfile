@@ -33,6 +33,9 @@ node() {
                    insecure: params.DISABLE_TLS_VALIDATION == "yes",
                    secretName: params.SECRET_NAME],
         service: [:],
+        applications: [
+            [ name: "my-test-app", description: "This is used for development", plan: "dev", account: params.DEV_DEVELOPER_ACCOUNT_ID ]
+        ],
         applicationPlans: [
           [ artefactFile: params.APPLICATION_PLAN]
         ]
@@ -64,6 +67,9 @@ node() {
                    insecure: params.DISABLE_TLS_VALIDATION == "yes",
                    secretName: params.SECRET_NAME],
         service: [:],
+        applications: [
+            [ name: params.APPLICATION_NAME + "-prod-app", description: "This is used for production", plan: "prod", account: params.PROD_DEVELOPER_ACCOUNT_ID ]
+        ],
         applicationPlans: [
           [ artefactFile: params.APPLICATION_PLAN]
         ]
