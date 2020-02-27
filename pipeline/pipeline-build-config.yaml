@@ -94,8 +94,10 @@ parameters:
   required: true
 - name: DEV_PRIVATE_BASE_URL
   required: true
+  value: "/api"
 - name: PROD_PRIVATE_BASE_URL
   required: true
+  value: "/api"
 - name: DEV_PRODUCTION_PUBLIC_BASE_URL
 - name: DEV_STAGING_PUBLIC_BASE_URL
 - name: PROD_PRODUCTION_PUBLIC_BASE_URL
