@@ -33,9 +33,6 @@ node() {
                    insecure: params.DISABLE_TLS_VALIDATION == "yes",
                    secretName: params.SECRET_NAME],
         service: [:],
-        applications: [
-            [ name: params.APPLICATION_NAME + "-app", description: "This is used for testing the API", plan: params.APPLICATION_NAME + "-app-dev", account: params.DEV_DEVELOPER_ACCOUNT_ID ]
-        ],
         applicationPlans: [
           [ artefactFile: params.APPLICATION_PLAN]
         ]
@@ -48,25 +45,8 @@ node() {
     // Create an Application Plan
     service.applyApplicationPlans()
 
-    // Create an Application
-    service.applyApplication()
-
-    // Run integration tests
-    runIntegrationTests(service)
-    
     // Promote to production
     service.promoteToProduction()
-  }
-
-  stage("Run integration tests") {
-    // To run the integration tests when using APIcast SaaS instances, we need
-    // to fetch the proxy definition to extract the staging public url
-    def proxy = service.readProxy("sandbox")
-    sh """set -e +x
-    curl -f -w "GetPet: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/pet/1 -H 'api-key: ${service.applications[0].userkey}'
-    curl -f -w "GetStore: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/store/ -H 'api-key: ${service.applications[0].userkey}'
-    curl -f -w "GetUser: %{http_code}\n" -o /dev/null -s ${proxy.sandbox_endpoint}/user/ -H 'api-key: ${service.applications[0].userkey}'
-    """
   }
 
   stage("Deploy API in Prod") {
@@ -84,9 +64,6 @@ node() {
                    insecure: params.DISABLE_TLS_VALIDATION == "yes",
                    secretName: params.SECRET_NAME],
         service: [:],
-        applications: [
-            [ name: params.APPLICATION_NAME + "-app", description: "This is used for production API", plan: params.APPLICATION_NAME + "-app-prod", account: params.PROD_DEVELOPER_ACCOUNT_ID ]
-        ],
         applicationPlans: [
           [ artefactFile: params.APPLICATION_PLAN]
         ]
@@ -97,12 +74,6 @@ node() {
 
     // Create an Application Plan
     service.applyApplicationPlans()
-
-    // Create an Application
-    service.applyApplication()
-
-    // Run integration tests
-    runIntegrationTests(service)
 
     // Promote to production
     service.promoteToProduction()

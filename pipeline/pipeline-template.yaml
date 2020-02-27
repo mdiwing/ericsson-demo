@@ -107,12 +107,7 @@ parameters:
 - name: TARGET_INSTANCE_PROD
   value: petstore-prod
   required: true
-- name: DEV_DEVELOPER_ACCOUNT_ID
-  required: true
-  value: "5"
-- name: PROD_DEVELOPER_ACCOUNT_ID
-  required: true
-  value: "7"
+  value: "1"
 - name: DISABLE_TLS_VALIDATION
   value: "yes"
 - name: APPLICATION_NAME
