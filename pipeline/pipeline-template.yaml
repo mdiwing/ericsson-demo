@@ -74,7 +74,7 @@ parameters:
   required: true
 - name: PUBLIC_BASE_PATH
   required: true
-  value: "/api"
+  value: "/"
 - name: API_BASE_SYSTEM_NAME
   value: petstore
   required: true
