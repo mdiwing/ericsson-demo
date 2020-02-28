@@ -79,7 +79,7 @@ parameters:
   value: petstore
   required: true
 - name: DEV_PRIVATE_BASE_URL
-  value: "http://petstore-groupit:8080"
+  value: "http://petstore-groupit.petstore.svc:8080"
   required: true
 - name: DEV_PROJECT
   required: true
@@ -88,7 +88,7 @@ parameters:
   required: true
   value: petstore-api-test
 - name: PROD_PRIVATE_BASE_URL
-  value: "http://petstore-santools:8080"
+  value: "http://petstore-santools.petstore.svc:8080"
   required: true
 - name: PROD_PROJECT
   required: true
