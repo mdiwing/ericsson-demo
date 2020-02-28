@@ -1,5 +1,5 @@
 {
-    "openapi": "3.0.2",
+    "openapi": "2.0.0",
     "servers": [
         {
             "url": "/v3"
