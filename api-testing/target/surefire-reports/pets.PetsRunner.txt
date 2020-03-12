@@ -1,9 +1,0 @@
--------------------------------------------------------------------------------
-Test set: pets.PetsRunner
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 6.244 s <<< FAILURE! - in pets.PetsRunner
-[1:3] Get Pet([pets] Petstore)  Time elapsed: 5.295 s  <<< ERROR!
-com.intuit.karate.exception.KarateException: 
-pets.feature:6 - 
-org.apache.http.conn.ConnectTimeoutException: Connect to api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443 [api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com/52.207.141.52] failed: connect timed out
-
