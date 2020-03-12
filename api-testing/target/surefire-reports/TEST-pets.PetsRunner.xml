@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="pets.PetsRunner" time="6.244" tests="1" errors="1" skipped="0" failures="0">
+  <properties>
+    <property name="sun.desktop" value="gnome"/>
+    <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="java.specification.version" value="1.8"/>
+    <property name="sun.cpu.isalist" value=""/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/home/jcordes/Documents/Customers/Ericsson/ericsson-demo/api-testing/target/test-classes:/home/jcordes/Documents/Customers/Ericsson/ericsson-demo/api-testing/target/classes:/home/jcordes/.m2/repository/com/intuit/karate/karate-apache/0.9.5/karate-apache-0.9.5.jar:/home/jcordes/.m2/repository/com/intuit/karate/karate-core/0.9.5/karate-core-0.9.5.jar:/home/jcordes/.m2/repository/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0.jar:/home/jcordes/.m2/repository/net/minidev/json-smart/2.3/json-smart-2.3.jar:/home/jcordes/.m2/repository/net/minidev/accessors-smart/1.2/accessors-smart-1.2.jar:/home/jcordes/.m2/repository/org/ow2/asm/asm/5.0.4/asm-5.0.4.jar:/home/jcordes/.m2/repository/info/cukes/cucumber-java/1.2.5/cucumber-java-1.2.5.jar:/home/jcordes/.m2/repository/info/cukes/cucumber-core/1.2.5/cucumber-core-1.2.5.jar:/home/jcordes/.m2/repository/org/yaml/snakeyaml/1.24/snakeyaml-1.24.jar:/home/jcordes/.m2/repository/de/siegmar/fastcsv/1.0.3/fastcsv-1.0.3.jar:/home/jcordes/.m2/repository/info/picocli/picocli/4.0.3/picocli-4.0.3.jar:/home/jcordes/.m2/repository/org/apache/httpcomponents/httpclient/4.5.11/httpclient-4.5.11.jar:/home/jcordes/.m2/repository/org/apache/httpcomponents/httpcore/4.4.13/httpcore-4.4.13.jar:/home/jcordes/.m2/repository/commons-codec/commons-codec/1.11/commons-codec-1.11.jar:/home/jcordes/.m2/repository/org/apache/httpcomponents/httpmime/4.5.11/httpmime-4.5.11.jar:/home/jcordes/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.25/jcl-over-slf4j-1.7.25.jar:/home/jcordes/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:/home/jcordes/.m2/repository/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar:/home/jcordes/.m2/repository/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar:/home/jcordes/.m2/repository/com/intuit/karate/karate-junit4/0.9.5/karate-junit4-0.9.5.jar:/home/jcordes/.m2/repository/junit/junit/4.12/junit-4.12.jar:/home/jcordes/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="user.timezone" value=""/>
+    <property name="java.vm.specification.version" value="1.8"/>
+    <property name="os.name" value="Linux"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre/lib/amd64"/>
+    <property name="sun.java.command" value="/home/jcordes/Documents/Customers/Ericsson/ericsson-demo/api-testing/target/surefire/surefirebooter8948096304167311374.jar /home/jcordes/Documents/Customers/Ericsson/ericsson-demo/api-testing/target/surefire 2020-03-12T21-35-36_366-jvmRun1 surefire164879494514802055tmp surefire_06965815414342716791tmp"/>
+    <property name="test" value="PetsRunner"/>
+    <property name="surefire.test.class.path" value="/home/jcordes/Documents/Customers/Ericsson/ericsson-demo/api-testing/target/test-classes:/home/jcordes/Documents/Customers/Ericsson/ericsson-demo/api-testing/target/classes:/home/jcordes/.m2/repository/com/intuit/karate/karate-apache/0.9.5/karate-apache-0.9.5.jar:/home/jcordes/.m2/repository/com/intuit/karate/karate-core/0.9.5/karate-core-0.9.5.jar:/home/jcordes/.m2/repository/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0.jar:/home/jcordes/.m2/repository/net/minidev/json-smart/2.3/json-smart-2.3.jar:/home/jcordes/.m2/repository/net/minidev/accessors-smart/1.2/accessors-smart-1.2.jar:/home/jcordes/.m2/repository/org/ow2/asm/asm/5.0.4/asm-5.0.4.jar:/home/jcordes/.m2/repository/info/cukes/cucumber-java/1.2.5/cucumber-java-1.2.5.jar:/home/jcordes/.m2/repository/info/cukes/cucumber-core/1.2.5/cucumber-core-1.2.5.jar:/home/jcordes/.m2/repository/org/yaml/snakeyaml/1.24/snakeyaml-1.24.jar:/home/jcordes/.m2/repository/de/siegmar/fastcsv/1.0.3/fastcsv-1.0.3.jar:/home/jcordes/.m2/repository/info/picocli/picocli/4.0.3/picocli-4.0.3.jar:/home/jcordes/.m2/repository/org/apache/httpcomponents/httpclient/4.5.11/httpclient-4.5.11.jar:/home/jcordes/.m2/repository/org/apache/httpcomponents/httpcore/4.4.13/httpcore-4.4.13.jar:/home/jcordes/.m2/repository/commons-codec/commons-codec/1.11/commons-codec-1.11.jar:/home/jcordes/.m2/repository/org/apache/httpcomponents/httpmime/4.5.11/httpmime-4.5.11.jar:/home/jcordes/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.25/jcl-over-slf4j-1.7.25.jar:/home/jcordes/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:/home/jcordes/.m2/repository/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar:/home/jcordes/.m2/repository/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar:/home/jcordes/.m2/repository/com/intuit/karate/karate-junit4/0.9.5/karate-junit4-0.9.5.jar:/home/jcordes/.m2/repository/junit/junit/4.12/junit-4.12.jar:/home/jcordes/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/jcordes"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.home" value="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre"/>
+    <property name="basedir" value="/home/jcordes/Documents/Customers/Ericsson/ericsson-demo/api-testing"/>
+    <property name="file.separator" value="/"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="surefire.real.class.path" value="/home/jcordes/Documents/Customers/Ericsson/ericsson-demo/api-testing/target/surefire/surefirebooter8948096304167311374.jar"/>
+    <property name="sun.boot.class.path" value="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre/lib/resources.jar:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre/lib/rt.jar:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre/lib/jsse.jar:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre/lib/jce.jar:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre/lib/charsets.jar:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre/lib/jfr.jar:/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre/classes"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="1.8.0_191-b12"/>
+    <property name="user.name" value="jcordes"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="3.10.0-891.el7.x86_64"/>
+    <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre/lib/endorsed"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/home/jcordes/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="1.8.0_191"/>
+    <property name="user.dir" value="/home/jcordes/Documents/Customers/Ericsson/ericsson-demo/api-testing"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="baseUrl" value="https://api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443"/>
+    <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="25.191-b12"/>
+    <property name="java.ext.dirs" value="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-0.el7_5.x86_64/jre/lib/ext:/usr/java/packages/lib/ext"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="52.0"/>
+  </properties>
+  <testcase name="[1:3] Get Pet" classname="[pets] Petstore" time="5.295">
+    <error message="pets.feature:6 - &#10;org.apache.http.conn.ConnectTimeoutException: Connect to api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443 [api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com/52.207.141.52] failed: connect timed out" type="com.intuit.karate.exception.KarateException">com.intuit.karate.exception.KarateException: 
+pets.feature:6 - 
+org.apache.http.conn.ConnectTimeoutException: Connect to api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443 [api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com/52.207.141.52] failed: connect timed out
+</error>
+    <system-out><![CDATA[21:35:37.599 [main] INFO  com.intuit.karate - baseUrl was https://api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443 
+21:35:37.916 [main] DEBUG com.intuit.karate - request:
+1 > GET https://api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443/pets/1
+1 > Accept-Encoding: gzip,deflate
+1 > Connection: Keep-Alive
+1 > Host: api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443
+1 > User-Agent: Apache-HttpClient/4.5.11 (Java/1.8.0_191)
+
+21:35:42.960 [main] ERROR com.intuit.karate - org.apache.http.conn.ConnectTimeoutException: Connect to api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443 [api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com/52.207.141.52] failed: connect timed out, http call failed after 5044 milliseconds for URL: https://api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443/pets/1
+21:35:42.960 [main] ERROR com.intuit.karate - http request failed: 
+org.apache.http.conn.ConnectTimeoutException: Connect to api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443 [api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com/52.207.141.52] failed: connect timed out
+]]></system-out>
+  </testcase>
+</testsuite>

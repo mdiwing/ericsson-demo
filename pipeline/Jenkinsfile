@@ -48,6 +48,10 @@ node() {
     // Create an Application Plan
     service.applyApplicationPlans()
 
+
+    // Test staging
+    mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl="https://api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443"
+
     // Promote to production
     service.promoteToProduction()
   }

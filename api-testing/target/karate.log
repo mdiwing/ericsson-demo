@@ -1,0 +1,41 @@
+21:24:42.586 [main] INFO  com.intuit.karate - karate.env system property was:  
+21:28:59.423 [main] INFO  com.intuit.karate - karate.env system property was:  
+21:29:13.224 [main] INFO  com.intuit.karate - karate.env system property was:  
+21:31:25.622 [main] INFO  com.intuit.karate - karate.env system property was:  
+21:33:07.884 [main] INFO  com.intuit.karate - baseUrl was test 
+21:33:08.126 [main] ERROR com.intuit.karate - org.apache.http.client.ClientProtocolException, http call failed after 0 milliseconds for URL: test/pets/1
+21:33:08.126 [main] ERROR com.intuit.karate - http request failed: 
+org.apache.http.client.ClientProtocolException
+21:33:43.815 [main] INFO  com.intuit.karate - baseUrl was https://test 
+21:33:44.078 [main] DEBUG com.intuit.karate - request:
+1 > GET https://test/pets/1
+1 > Accept-Encoding: gzip,deflate
+1 > Connection: Keep-Alive
+1 > Host: test
+1 > User-Agent: Apache-HttpClient/4.5.11 (Java/1.8.0_191)
+
+21:33:44.110 [main] ERROR com.intuit.karate - java.net.UnknownHostException: test: Name or service not known, http call failed after 32 milliseconds for URL: https://test/pets/1
+21:33:44.110 [main] ERROR com.intuit.karate - http request failed: 
+java.net.UnknownHostException: test: Name or service not known
+21:34:03.018 [main] INFO  com.intuit.karate - baseUrl was https://test 
+21:34:03.308 [main] DEBUG com.intuit.karate - request:
+1 > GET https://test/pets/1
+1 > Accept-Encoding: gzip,deflate
+1 > Connection: Keep-Alive
+1 > Host: test
+1 > User-Agent: Apache-HttpClient/4.5.11 (Java/1.8.0_191)
+
+21:34:03.320 [main] ERROR com.intuit.karate - java.net.UnknownHostException: test: Name or service not known, http call failed after 12 milliseconds for URL: https://test/pets/1
+21:34:03.320 [main] ERROR com.intuit.karate - http request failed: 
+java.net.UnknownHostException: test: Name or service not known
+21:35:37.599 [main] INFO  com.intuit.karate - baseUrl was https://api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443 
+21:35:37.916 [main] DEBUG com.intuit.karate - request:
+1 > GET https://api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443/pets/1
+1 > Accept-Encoding: gzip,deflate
+1 > Connection: Keep-Alive
+1 > Host: api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443
+1 > User-Agent: Apache-HttpClient/4.5.11 (Java/1.8.0_191)
+
+21:35:42.960 [main] ERROR com.intuit.karate - org.apache.http.conn.ConnectTimeoutException: Connect to api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443 [api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com/52.207.141.52] failed: connect timed out, http call failed after 5044 milliseconds for URL: https://api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443/pets/1
+21:35:42.960 [main] ERROR com.intuit.karate - http request failed: 
+org.apache.http.conn.ConnectTimeoutException: Connect to api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com:443 [api-group-it-apicast-production.apps.ericsson-4162.open.redhat.com/52.207.141.52] failed: connect timed out
