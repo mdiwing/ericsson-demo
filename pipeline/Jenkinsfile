@@ -48,10 +48,14 @@ node("maven") {
     // Create an Application Plan
     service.applyApplicationPlans()
 
-    def proxy = service.readProxy("sandbox")
+    def baseUrl = service.readProxy("sandbox").sandbox_endpoint
+    def userKey = service.applications[0].userkey
+
+    echo "baseUrl is ${baseUrl}"
+    echo "userKey is ${userKey}"
 
     // Test staging
-    sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${proxy.sandbox_endpoint}' -DuserKey=${service.applications[0].userkey}"
+    sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${baseUrl}' -DuserKey=${userKey}"
 
     // Promote to production
     service.promoteToProduction()
