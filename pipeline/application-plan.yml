@@ -1,11 +1,11 @@
 ---
 plan:
-  name: plan1
+  name: free-plan
   setup_fee: 0.0
   cost_per_month: 0.0
   trial_period_days: 0
   cancellation_period: 0
-  system_name: plan1
+  system_name: free_plan
   end_user_required: false
 limits: 
 - period: eternity
@@ -34,8 +34,8 @@ pricingrules:
   max: 1000000
   metric_system_name: hits
 plan_features:
-- name: Unlimited Greetings
-  system_name: unlimited_greetings
+- name: Unlimited Calls
+  system_name: unlimited_calls
   scope: application_plan
   visible: true
 metrics:
