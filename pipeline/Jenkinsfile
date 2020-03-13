@@ -13,7 +13,7 @@ library identifier: '3scale-toolbox-jenkins@master',
 
 def service = null
 
-node() {
+node("maven") {
   stage('Checkout Source') {
     checkout scm
   }
