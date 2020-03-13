@@ -49,7 +49,7 @@ node("maven") {
     service.applyApplicationPlans()
 
     def baseUrl = service.readProxy("sandbox").sandbox_endpoint
-    def userKey = service.applications[0].userkey
+    def userKey = applications[0].userkey
 
     echo "baseUrl is ${baseUrl}"
     echo "userKey is ${userKey}"
