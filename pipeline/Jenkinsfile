@@ -36,8 +36,13 @@ node("maven") {
         applications: [
             [ name: params.APPLICATION_NAME + "-test-app", description: "This is used for development", plan: "dev", account: params.DEV_DEVELOPER_ACCOUNT_ID ]
         ],
+        //applicationPlans: [
+        //  [ artefactFile: params.APPLICATION_PLAN]
+        //]
         applicationPlans: [
-          [ artefactFile: params.APPLICATION_PLAN]
+          [ systemName: "test", name: "Test Plan", defaultPlan: true, published: true ],
+          [ systemName: "silver", name: "Silver Plan" ],
+          [ systemName: "gold", name: "Gold Plan" ],
         ]
     )
 
