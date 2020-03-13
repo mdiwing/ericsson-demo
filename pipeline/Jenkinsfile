@@ -50,15 +50,13 @@ node("maven") {
 
     def baseUrl = service.readProxy("sandbox").sandbox_endpoint
 
-    echo "service object is ${service}"
-
-    def userKey = service.applications[0].userkey
+    def apiKey = service.applications[0].userkey
 
     echo "baseUrl is ${baseUrl}"
-    echo "userKey is ${userKey}"
+    echo "apiKey is ${apiKey}"
 
     // Test staging
-    sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${baseUrl}' -DuserKey=${userKey}"
+    sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${baseUrl}' -DapiKey=${apiKey}"
 
     // Promote to production
     service.promoteToProduction()

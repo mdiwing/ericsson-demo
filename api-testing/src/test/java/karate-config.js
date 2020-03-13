@@ -3,7 +3,7 @@ function fn() {
     appId: 'my.app.id',
     appSecret: 'my.secret',
     baseUrl: karate.properties['baseUrl'],
-    userKey: karate.properties['userKey']
+    apiKey: karate.properties['apiKey']
   };
 
   karate.configure('connectTimeout', 5000);
