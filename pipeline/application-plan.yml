@@ -1,11 +1,11 @@
 ---
 plan:
-  name: dev
+  name: dev-plan
   setup_fee: 0.0
   cost_per_month: 0.0
   trial_period_days: 0
   cancellation_period: 0
-  system_name: dev_plan
+  system_name: dev
   end_user_required: false
 limits: 
 - period: eternity
