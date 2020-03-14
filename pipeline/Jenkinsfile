@@ -81,7 +81,7 @@ node("maven") {
                    secretName: params.SECRET_NAME],
         service: [:],
         applications: [
-            [ name: params.APPLICATION_NAME + "-test-app", description: "This is used for testing", plan: "test", account: params.TEST_DEVELOPER_ACCOUNT_ID ]
+            [ name: params.APPLICATION_NAME + "-test-app", description: "This is used for testing", plan: "dev", account: params.TEST_DEVELOPER_ACCOUNT_ID ]
         ],
         applicationPlans: [
           [ artefactFile: params.APPLICATION_PLAN]
@@ -94,6 +94,19 @@ node("maven") {
 
     // Create an Application Plan
     service.applyApplicationPlans()
+
+    // Create an Application
+    service.applyApplication()
+
+    def baseUrl = service.readProxy("sandbox").sandbox_endpoint
+
+    def apiKey = service.applications[0].userkey
+
+    echo "baseUrl is ${baseUrl}"
+    echo "apiKey is ${apiKey}"
+
+    // Test staging
+    sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${baseUrl}' -DapiKey=${apiKey}"
 
     // Promote to production
     service.promoteToProduction()
@@ -115,7 +128,7 @@ node("maven") {
                    secretName: params.SECRET_NAME],
         service: [:],
         applications: [
-            [ name: params.APPLICATION_NAME + "-prod-app", description: "This is used for production", plan: "prod", account: params.PROD_DEVELOPER_ACCOUNT_ID ]
+            [ name: params.APPLICATION_NAME + "-prod-app", description: "This is used for production", plan: "dev", account: params.PROD_DEVELOPER_ACCOUNT_ID ]
         ],
         applicationPlans: [
           [ artefactFile: params.APPLICATION_PLAN]
@@ -127,6 +140,19 @@ node("maven") {
 
     // Create an Application Plan
     service.applyApplicationPlans()
+
+    // Create an Application
+    service.applyApplication()
+
+    def baseUrl = service.readProxy("sandbox").sandbox_endpoint
+
+    def apiKey = service.applications[0].userkey
+
+    echo "baseUrl is ${baseUrl}"
+    echo "apiKey is ${apiKey}"
+
+    // Test staging
+    sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${baseUrl}' -DapiKey=${apiKey}"
 
     // Promote to production
     service.promoteToProduction()

@@ -1,11 +1,5 @@
 Feature: Petstore
 
-Scenario: Get all pets, not authorized
-
-Given url baseUrl + '/api/pets'
-When method get
-Then status 403
-
 Scenario: Get all pets, authorized
 
 Given url baseUrl + '/api/pets'

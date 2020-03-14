@@ -128,10 +128,10 @@ parameters:
   value: "6"
   required: true
 - name: TEST_DEVELOPER_ACCOUNT_ID
-  value: "1"
+  value: "8"
   required: true
 - name: PROD_DEVELOPER_ACCOUNT_ID
-  value: "1"
+  value: "10"
   required: true
 - name: OPENAPI_SPECIFICATION_FILE
   required: true
