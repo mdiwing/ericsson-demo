@@ -36,12 +36,12 @@ node("maven") {
           }
         }
 
-        openshift.selector('dc', params.DEV_PROJECT).rollout().latest()
+        //openshift.selector('dc', params.DEV_PROJECT).rollout().latest()
         def latestDeploymentVersion = openshift.selector('dc',params.DEV_PROJECT).object().status.latestVersion
         def rc = openshift.selector('rc', params.DEV_PROJECT+'-'+latestDeploymentVersion)
         
         timeout(time: 5, unit: 'MINUTES') {
-          rc.untilEach(1){
+          .untilEach(1){
             def rcMap = it.object()
             return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
           }
