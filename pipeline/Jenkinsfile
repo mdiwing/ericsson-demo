@@ -24,7 +24,7 @@ node("maven") {
         def bc = openshift.selector('bc', params.DEV_PROJECT)
  
         if (bc == null) {
-          def bc = openshift.newApp('registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~'+params.GIT_REPO+' --context-dir='+params.APPLICATION_GIT_CONTEXT_DIR+' --name='+params.DEV_PROJECT).narrow('bc')
+          bc = openshift.newApp('registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~'+params.GIT_REPO+' --context-dir='+params.APPLICATION_GIT_CONTEXT_DIR+' --name='+params.DEV_PROJECT).narrow('bc')
         } else {
            bc.startBuild()
         }
