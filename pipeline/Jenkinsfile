@@ -46,16 +46,20 @@ node("maven") {
             return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
           }
         }
-
-        openshift.tag(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':latest',params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev')
       }
     }
   }
 
   stage("Test Application in Dev") {
     sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${params.DEV_PRIVATE_BASE_URL}' -DapiKey=dummy"
+    openshift.withCluster() {
+      openshift.withProject(params.DEV_PROJECT) {
+        openshift.tag(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':latest',params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev')
+      }
+    }
   }
 
+try {
   stage("Deploy API in Dev") {
 
     // create the ThreescaleService object from your API metadata manifest:
@@ -101,6 +105,49 @@ node("maven") {
 
     // Promote to production
     service.promoteToProduction()
+  }
+} catch (Exception e) {
+   echo "Deploy API in Dev failed, but I will continue."
+}
+
+  stage("Deploy Application in Test") {
+    openshift.withCluster() {
+      openshift.withProject(params.TEST_PROJECT) {
+        def bc = openshift.selector('bc', params.TEST_PROJECT)
+
+        if (bc == null) {
+          bc = openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev --name='+params.TEST_PROJECT).narrow('bc')
+        } else {
+           bc.startBuild()
+        }
+
+        def builds = bc.related('builds')
+        timeout(time: 10, unit: 'MINUTES') {
+          builds.untilEach(1) {
+              return it.object().status.phase == "Complete"
+          }
+        }
+
+        def latestDeploymentVersion = openshift.selector('dc',params.TEST_PROJECT).object().status.latestVersion
+        def rc = openshift.selector('rc', params.TEST_PROJECT+'-'+latestDeploymentVersion)
+
+        timeout(time: 5, unit: 'MINUTES') {
+          rc.untilEach(1){
+            def rcMap = it.object()
+            return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
+          }
+        }
+      }
+    }
+  }
+
+  stage("Test Application in Test") {
+    sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${params.TEST_PRIVATE_BASE_URL}' -DapiKey=dummy"
+    openshift.withCluster() {
+      openshift.withProject(params.TEST_PROJECT) {
+        openshift.tag(params.TEST_PROJECT+'/'+params.TEST_PROJECT+':latest',params.TEST_PROJECT+'/'+params.TEST_PROJECT+':prod')
+      }
+    }
   }
 
   stage("Deploy API in Test") {
@@ -148,6 +195,41 @@ node("maven") {
 
     // Promote to production
     service.promoteToProduction()
+  }
+
+  stage("Deploy Application in Prod") {
+    openshift.withCluster() {
+      openshift.withProject(params.PROD_PROJECT) {
+        def bc = openshift.selector('bc', params.PROD_PROJECT)
+
+        if (bc == null) {
+          bc = openshift.newApp(params.TEST_PROJECT+'/'+params.TEST_PROJECT+':dev --name='+params.PROD_PROJECT).narrow('bc')
+        } else {
+           bc.startBuild()
+        }
+
+        def builds = bc.related('builds')
+        timeout(time: 10, unit: 'MINUTES') {
+          builds.untilEach(1) {
+              return it.object().status.phase == "Complete"
+          }
+        }
+
+        def latestDeploymentVersion = openshift.selector('dc',params.PROD_PROJECT).object().status.latestVersion
+        def rc = openshift.selector('rc', params.PROD_PROJECT+'-'+latestDeploymentVersion)
+
+        timeout(time: 5, unit: 'MINUTES') {
+          rc.untilEach(1){
+            def rcMap = it.object()
+            return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
+          }
+        }
+      }
+    }
+  }
+
+  stage("Test Application in Prod") {
+    sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${params.PROD_PRIVATE_BASE_URL}' -DapiKey=dummy"
   }
 
   stage("Deploy API in Prod") {
