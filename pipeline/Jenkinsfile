@@ -114,9 +114,9 @@ try {
   stage("Deploy Application in Test") {
     openshift.withCluster() {
       openshift.withProject(params.TEST_PROJECT) {
-        def dc = openshift.selector('dc', params.TEST_PROJECT)
-
-        if (dc == null) {
+        try {
+          def dc = openshift.selector('dc', params.TEST_PROJECT)
+        } catch (Exception e) {
           openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':test --name='+params.TEST_PROJECT)
         }
 
@@ -192,9 +192,9 @@ try {
   stage("Deploy Application in Prod") {
     openshift.withCluster() {
       openshift.withProject(params.PROD_PROJECT) {
-        def dc = openshift.selector('dc', params.PROD_PROJECT)
-
-        if (dc == null) {
+        try {
+          def dc = openshift.selector('dc', params.PROD_PROJECT)
+        } catch (Exception e) {
           openshift.newApp(params.TEST_PROJECT+'/'+params.TEST_PROJECT+':prod --name='+params.PROD_PROJECT)
         }
 
