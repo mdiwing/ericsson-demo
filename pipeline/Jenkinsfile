@@ -123,12 +123,13 @@ try {
         try {
           bc = openshift.selector('bc', params.TEST_PROJECT)
         } catch (Exception e) {
+          bc = null
         }
 
         if (bc == null) {
           bc = openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev --name='+params.TEST_PROJECT).narrow('bc')
         } else {
-           bc.startBuild()
+          bc.startBuild()
         }
 
         def builds = bc.related('builds')
