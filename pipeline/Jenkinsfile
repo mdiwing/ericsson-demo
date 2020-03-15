@@ -22,11 +22,16 @@ node("maven") {
     openshift.withCluster() {
       openshift.withProject(params.DEV_PROJECT) {
         def bc = openshift.selector('bc', params.DEV_PROJECT)
+
+        try {
+          bc = openshift.selector('bc', params.DEV_PROJECT)
+        } catch (Exception e) {
+        }
  
         if (bc == null) {
           bc = openshift.newApp('registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~'+params.GIT_REPO+' --context-dir='+params.APPLICATION_GIT_CONTEXT_DIR+' --name='+params.DEV_PROJECT).narrow('bc')
         } else {
-           bc.startBuild()
+          bc.startBuild()
         }
 
         def builds = bc.related('builds')
@@ -113,7 +118,12 @@ try {
   stage("Deploy Application in Test") {
     openshift.withCluster() {
       openshift.withProject(params.TEST_PROJECT) {
-        def bc = openshift.selector('bc', params.TEST_PROJECT)
+        def bc = null
+
+        try {
+          bc = openshift.selector('bc', params.TEST_PROJECT)
+        } catch (Exception e) {
+        }
 
         if (bc == null) {
           bc = openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev --name='+params.TEST_PROJECT).narrow('bc')
