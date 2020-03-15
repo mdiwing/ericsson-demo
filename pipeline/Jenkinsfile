@@ -121,10 +121,15 @@ try {
         def bc = null
 
         try {
+          echo "Trying to find build."
           bc = openshift.selector('bc', params.TEST_PROJECT)
+          echo "Build found, starting it"
           bc.startBuild()
+          echo "Build started."
         } catch (Exception e) {
+          echo "No build found, creating new-app"
           bc = openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev --name='+params.TEST_PROJECT).narrow('bc')
+          echo "new-app created."
         }
 
         def builds = bc.related('builds')
