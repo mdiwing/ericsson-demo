@@ -141,6 +141,7 @@ try {
     }
   }
 
+try {
   stage("Deploy API in Test") {
 
     // create the ThreescaleService object from your API metadata manifest:
@@ -187,6 +188,9 @@ try {
     // Promote to production
     service.promoteToProduction()
   }
+} catch (Exception e) {
+   echo "Deploy API in Test failed, but I will continue."
+}
 
   stage("Deploy Application in Prod") {
     openshift.withCluster() {
@@ -214,6 +218,7 @@ try {
     sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${params.PROD_PRIVATE_BASE_URL}' -DapiKey=dummy"
   }
 
+try {
   stage("Deploy API in Prod") {
 
     // Prepare
@@ -259,5 +264,8 @@ try {
     // Promote to production
     service.promoteToProduction()
   }
+} catch (Exception e) {
+   echo "Deploy API in Prod failed, but I will continue."
+}
 
 }
