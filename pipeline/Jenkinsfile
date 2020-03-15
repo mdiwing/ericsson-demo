@@ -41,7 +41,7 @@ node("maven") {
         def rc = openshift.selector('rc', params.DEV_PROJECT+'-'+latestDeploymentVersion)
         
         timeout(time: 5, unit: 'MINUTES') {
-          .untilEach(1){
+          rc.untilEach(1){
             def rcMap = it.object()
             return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
           }
