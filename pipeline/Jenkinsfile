@@ -114,13 +114,10 @@ try {
   stage("Deploy Application in Test") {
     openshift.withCluster() {
       openshift.withProject(params.TEST_PROJECT) {
-        def bc = null
+        def dc = openshift.selector('dc', params.TEST_PROJECT)
 
-        try {
-          bc = openshift.selector('bc', params.TEST_PROJECT)
-          bc.startBuild()
-        } catch (Exception e) {
-          bc = openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev --name='+params.TEST_PROJECT).narrow('bc')
+        if (dc == null) {
+          openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev --name='+params.TEST_PROJECT)
         }
 
         def latestDeploymentVersion = openshift.selector('dc',params.TEST_PROJECT).object().status.latestVersion
