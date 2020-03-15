@@ -113,13 +113,10 @@ try {
   stage("Deploy Application in Test") {
     openshift.withCluster() {
       openshift.withProject(params.TEST_PROJECT) {
-        try {
-          echo "Trying to find dc ..."
-          def dc = openshift.selector('dc', params.TEST_PROJECT)
-        } catch (Exception e) {
-          echo "No dc found, trying new-app."
+        def dc = openshift.selector('dc', params.TEST_PROJECT)
+
+        if (!dc.exists()) {
           openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':test --name='+params.TEST_PROJECT)
-          echo "Created new-app."
         }
 
         def latestDeploymentVersion = openshift.selector('dc',params.TEST_PROJECT).object().status.latestVersion
@@ -194,9 +191,9 @@ try {
   stage("Deploy Application in Prod") {
     openshift.withCluster() {
       openshift.withProject(params.PROD_PROJECT) {
-        try {
-          def dc = openshift.selector('dc', params.PROD_PROJECT)
-        } catch (Exception e) {
+        def dc = openshift.selector('dc', params.PROD_PROJECT)
+
+        if (!dc.exists()) {
           openshift.newApp(params.TEST_PROJECT+'/'+params.TEST_PROJECT+':prod --name='+params.PROD_PROJECT)
         }
 
