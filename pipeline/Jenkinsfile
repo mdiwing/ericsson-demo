@@ -21,7 +21,7 @@ node("maven") {
   stage("Deploy Application in Dev") {
     openshift.withCluster() {
       openshift.withProject(params.DEV_PROJECT) {
-        def bc = openshift.newApp('registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~${params.GIT_REPO} --context-dir='+params.APPLICATION_GIT_CONTEXT_DIR+' --name='+params.DEV_PROJECT).narrow('bc')
+        def bc = openshift.newApp('registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~'+params.GIT_REPO+' --context-dir='+params.APPLICATION_GIT_CONTEXT_DIR+' --name='+params.DEV_PROJECT).narrow('bc')
         def build = bc.related('builds')
         timeout(10) {
           builds.untilEach(1) {
