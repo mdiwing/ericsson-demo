@@ -123,13 +123,6 @@ try {
           bc = openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev --name='+params.TEST_PROJECT).narrow('bc')
         }
 
-        def builds = bc.related('builds')
-        timeout(time: 10, unit: 'MINUTES') {
-          builds.untilEach(1) {
-              return it.object().status.phase == "Complete"
-          }
-        }
-
         def latestDeploymentVersion = openshift.selector('dc',params.TEST_PROJECT).object().status.latestVersion
         def rc = openshift.selector('rc', params.TEST_PROJECT+'-'+latestDeploymentVersion)
 
