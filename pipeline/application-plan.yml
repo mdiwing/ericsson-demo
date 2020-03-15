@@ -1,6 +1,8 @@
 ---
 plan:
   name: dev-plan
+  default: true
+  published: true
   setup_fee: 0.0
   cost_per_month: 0.0
   trial_period_days: 0

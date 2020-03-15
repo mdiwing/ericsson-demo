@@ -30,7 +30,16 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "user_key",
+            "description": "Your access API Key",
+            "type": "string",
+            "in": "query",
+            "x-data-threescale-name": "user_keys",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -50,6 +59,14 @@
           "application/json"
         ],
         "parameters": [
+          {
+            "name": "user_key",
+            "description": "Your access API Key",
+            "type": "string",
+            "in": "query",
+            "x-data-threescale-name": "user_keys",
+            "required": true
+          },
           {
             "name": "body",
             "in": "body",
@@ -79,6 +96,14 @@
         ],
         "parameters": [
           {
+            "name": "user_key",
+            "description": "Your access API Key",
+            "type": "string",
+            "in": "query",
+            "x-data-threescale-name": "user_keys",
+            "required": true
+          },
+          {
             "name": "id",
             "in": "path",
             "required": true,
@@ -103,6 +128,14 @@
           "application/json"
         ],
         "parameters": [
+          {
+            "name": "user_key",
+            "description": "Your access API Key",
+            "type": "string",
+            "in": "query",
+            "x-data-threescale-name": "user_keys",
+            "required": true
+          },
           {
             "name": "id",
             "in": "path",
