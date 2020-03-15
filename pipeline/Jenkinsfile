@@ -1,11 +1,4 @@
 #!groovy
-
-// This CI/CD pipeline will execute within the container of a custom Jenkins image that includes the "3scale-toolbox-jenkins" shared library
-// Documentation pertaining to this shared library can be found here:
-//   1)  https://developers.redhat.com/blog/2019/07/31/using-the-3scale-toolbox-jenkins-shared-library/
-//   2)  https://github.com/rh-integration/3scale-toolbox-jenkins/blob/master/README.md
-
-// TO-DO:  Explain why doesn't this groovy functionality just come out of the box with the the 3scale toolbox container image ?
 library identifier: '3scale-toolbox-jenkins@master', 
         retriever: modernSCM([$class: 'GitSCMSource',
                               remote: 'https://github.com/rh-integration/3scale-toolbox-jenkins.git',
@@ -18,7 +11,7 @@ node("maven") {
     checkout scm
   }
 
-  stage("Deploy Application in Dev") {
+  stage("Dev: Build and Deploy Application") {
     openshift.withCluster() {
       openshift.withProject(params.DEV_PROJECT) {
         def bc = openshift.selector('bc', params.DEV_PROJECT)
@@ -52,25 +45,18 @@ node("maven") {
     }
   }
 
-  stage("Test Application in Dev") {
+  stage("Dev: Test Application") {
     sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${params.DEV_PRIVATE_BASE_URL}' -DapiKey=dummy"
-    openshift.withCluster() {
-      openshift.withProject(params.DEV_PROJECT) {
-        openshift.tag(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':latest',params.DEV_PROJECT+'/'+params.DEV_PROJECT+':test')
-      }
-    }
   }
 
-try {
-  stage("Deploy API in Dev") {
-
+  stage("Dev: Provision API") {
     // create the ThreescaleService object from your API metadata manifest:
     service = toolbox.prepareThreescaleService(
         openapi: [filename: params.OPENAPI_SPECIFICATION_FILE ],
         environment: [ baseSystemName: params.API_BASE_SYSTEM_NAME,
                        publicBasePath: params.PUBLIC_BASE_PATH,
-		       privateBaseUrl: params.DEV_PRIVATE_BASE_URL,
-		       environmentName: params.DEV_PROJECT ],
+  	               privateBaseUrl: params.DEV_PRIVATE_BASE_URL,
+	    	       environmentName: params.DEV_PROJECT ],
         toolbox: [ openshiftProject: params.NAMESPACE,
                    destination: params.TARGET_INSTANCE_DEV,
                    image: params.TOOLBOX_IMAGE_REGISTRY,
@@ -94,7 +80,9 @@ try {
 
     // Create an Application
     service.applyApplication()
-
+  }
+ 
+  stage("Dev: Test API") {
     def baseUrl = service.readProxy("sandbox").sandbox_endpoint
 
     def apiKey = service.applications[0].userkey
@@ -104,15 +92,20 @@ try {
 
     // Test staging
     sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${baseUrl}' -DapiKey=${apiKey}"
+  }
 
+  stage("Dev: Promote to Test") {
     // Promote to production
     service.promoteToProduction()
-  }
-} catch (Exception e) {
-   echo "Deploy API in Dev failed, but I will continue."
-}
 
-  stage("Deploy Application in Test") {
+    openshift.withCluster() {
+      openshift.withProject(params.DEV_PROJECT) {
+        openshift.tag(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':latest',params.DEV_PROJECT+'/'+params.DEV_PROJECT+':test')
+      }
+    }
+  }
+
+  stage("Test: Deploy Application") {
     openshift.withCluster() {
       openshift.withProject(params.TEST_PROJECT) {
         def dc = openshift.selector('dc', params.TEST_PROJECT)
@@ -136,17 +129,11 @@ try {
     }
   }
 
-  stage("Test Application in Test") {
+  stage("Test: Test Application") {
     sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${params.TEST_PRIVATE_BASE_URL}' -DapiKey=dummy"
-    openshift.withCluster() {
-      openshift.withProject(params.TEST_PROJECT) {
-        openshift.tag(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':test',params.DEV_PROJECT+'/'+params.DEV_PROJECT+':prod')
-      }
-    }
   }
 
-try {
-  stage("Deploy API in Test") {
+  stage("Test: Provision API") {
 
     // create the ThreescaleService object from your API metadata manifest:
     service = toolbox.prepareThreescaleService(
@@ -178,7 +165,9 @@ try {
 
     // Create an Application
     service.applyApplication()
+  }
 
+  stage("Test: Test API") {
     def baseUrl = service.readProxy("sandbox").sandbox_endpoint
 
     def apiKey = service.applications[0].userkey
@@ -187,16 +176,21 @@ try {
     echo "apiKey is ${apiKey}"
 
     // Test staging
-    sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${baseUrl}' -DapiKey=${apiKey}"
+    sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${baseUrl}' -DapiKey=${apiKey}" 
+  }
 
+  stage("Test: Promote to Prod") {
     // Promote to production
     service.promoteToProduction()
-  }
-} catch (Exception e) {
-   echo "Deploy API in Test failed, but I will continue."
-}
 
-  stage("Deploy Application in Prod") {
+    openshift.withCluster() {
+      openshift.withProject(params.TEST_PROJECT) {
+        openshift.tag(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':test',params.DEV_PROJECT+'/'+params.DEV_PROJECT+':prod')
+      }
+    }
+  }
+
+  stage("Prod: Deploy Application") {
     openshift.withCluster() {
       openshift.withProject(params.PROD_PROJECT) {
         def dc = openshift.selector('dc', params.PROD_PROJECT)
@@ -220,12 +214,11 @@ try {
     }
   }
 
-  stage("Test Application in Prod") {
+  stage("Prod: Test Application") {
     sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${params.PROD_PRIVATE_BASE_URL}' -DapiKey=dummy"
   }
 
-try {
-  stage("Deploy API in Prod") {
+  stage("Prod: Provision API") {
 
     // Prepare
     service = toolbox.prepareThreescaleService(
@@ -256,7 +249,9 @@ try {
 
     // Create an Application
     service.applyApplication()
+  }
 
+  stage("Prod: Test API") {
     def baseUrl = service.readProxy("sandbox").sandbox_endpoint
 
     def apiKey = service.applications[0].userkey
@@ -270,8 +265,4 @@ try {
     // Promote to production
     service.promoteToProduction()
   }
-} catch (Exception e) {
-   echo "Deploy API in Prod failed, but I will continue."
-}
-
 }
