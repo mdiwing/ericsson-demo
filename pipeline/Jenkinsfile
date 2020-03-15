@@ -55,7 +55,7 @@ node("maven") {
     sh "mvn -f api-testing/pom.xml test -Dtest=PetsRunner -DbaseUrl='${params.DEV_PRIVATE_BASE_URL}' -DapiKey=dummy"
     openshift.withCluster() {
       openshift.withProject(params.DEV_PROJECT) {
-        openshift.tag(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':latest',params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev')
+        openshift.tag(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':latest',params.DEV_PROJECT+'/'+params.DEV_PROJECT+':test')
       }
     }
   }
@@ -117,7 +117,7 @@ try {
         def dc = openshift.selector('dc', params.TEST_PROJECT)
 
         if (dc == null) {
-          openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev --name='+params.TEST_PROJECT)
+          openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':test --name='+params.TEST_PROJECT)
         }
 
         def latestDeploymentVersion = openshift.selector('dc',params.TEST_PROJECT).object().status.latestVersion
@@ -192,19 +192,10 @@ try {
   stage("Deploy Application in Prod") {
     openshift.withCluster() {
       openshift.withProject(params.PROD_PROJECT) {
-        def bc = openshift.selector('bc', params.PROD_PROJECT)
+        def dc = openshift.selector('dc', params.PROD_PROJECT)
 
-        if (bc == null) {
-          bc = openshift.newApp(params.TEST_PROJECT+'/'+params.TEST_PROJECT+':dev --name='+params.PROD_PROJECT).narrow('bc')
-        } else {
-           bc.startBuild()
-        }
-
-        def builds = bc.related('builds')
-        timeout(time: 10, unit: 'MINUTES') {
-          builds.untilEach(1) {
-              return it.object().status.phase == "Complete"
-          }
+        if (dc == null) {
+          openshift.newApp(params.TEST_PROJECT+'/'+params.TEST_PROJECT+':prod --name='+params.PROD_PROJECT)
         }
 
         def latestDeploymentVersion = openshift.selector('dc',params.PROD_PROJECT).object().status.latestVersion

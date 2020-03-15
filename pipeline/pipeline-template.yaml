@@ -95,7 +95,7 @@ parameters:
   required: true
   value: petstore-dev
 - name: TEST_PRIVATE_BASE_URL
-  value: "http://petstore-test.petstore-test.svc.cluster.local.svc:8080"
+  value: "http://petstore-test.petstore-test.svc.cluster.local:8080"
   required: true
 - name: TEST_PROJECT
   required: true
