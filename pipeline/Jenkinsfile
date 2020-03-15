@@ -21,7 +21,14 @@ node("maven") {
   stage("Deploy Application in Dev") {
     openshift.withCluster() {
       openshift.withProject(params.DEV_PROJECT) {
-        def bc = openshift.newApp('registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~'+params.GIT_REPO+' --context-dir='+params.APPLICATION_GIT_CONTEXT_DIR+' --name='+params.DEV_PROJECT).narrow('bc')
+        def bc = openshift.selector('bc', params.DEV_PROJECT)
+ 
+        if (bc == null) {
+          def bc = openshift.newApp('registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~'+params.GIT_REPO+' --context-dir='+params.APPLICATION_GIT_CONTEXT_DIR+' --name='+params.DEV_PROJECT).narrow('bc')
+        } else {
+           bc.startBuild()
+        }
+
         def builds = bc.related('builds')
         timeout(10) {
           builds.untilEach(1) {
@@ -35,6 +42,8 @@ node("maven") {
             return (it.object().status.phase == "Running")
           } 
         }
+
+        openshift.tag(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':latest',params.DEV_PROJECT+'/'+params.DEV_PROJECT+':dev')
       }
     }
   }
