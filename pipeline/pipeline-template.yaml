@@ -61,6 +61,8 @@ objects:
           value: ${DISABLE_TLS_VALIDATION}
         - name: APPLICATION_NAME
           value: ${APPLICATION_NAME}
+        - name: APPLICATION_GIT_CONTEXT_DIR
+          value: ${APPLICATION_GIT_CONTEXT_DIR}
         - name: OPENAPI_SPECIFICATION_FILE
           value: ${OPENAPI_SPECIFICATION_FILE}
         - name: DEV_DEVELOPER_ACCOUNT_ID
@@ -87,23 +89,23 @@ parameters:
   value: petstore
   required: true
 - name: DEV_PRIVATE_BASE_URL
-  value: "http://petstore-groupit.petstore.svc:8080"
+  value: "http://petstore-dev.petstore-dev.svc.cluster.local:8080"
   required: true
 - name: DEV_PROJECT
   required: true
-  value: petstore-api-dev
+  value: petstore-dev
 - name: TEST_PRIVATE_BASE_URL
-  value: "http://petstore-santools.petstore.svc:8080"
+  value: "http://petstore-test.petstore-test.svc.cluster.local.svc:8080"
   required: true
 - name: TEST_PROJECT
   required: true
-  value: petstore-api-test
+  value: petstore-test
 - name: PROD_PRIVATE_BASE_URL
-  value: "http://petstore-managed-services.petstore.svc:8080"
+  value: "http://petstore-prod.petstore-prod.svc.cluster.local:8080"
   required: true
 - name: PROD_PROJECT
   required: true
-  value: petstore-api-prod
+  value: petstore-prod
 - name: IMAGE_NAMESPACE
   required: true
   value: petstore
@@ -122,7 +124,10 @@ parameters:
 - name: DISABLE_TLS_VALIDATION
   value: "yes"
 - name: APPLICATION_NAME
-  value: "petstore-api"
+  value: "petstore"
+  required: true
+- name: APPLICATION_GIT_CONTEXT_DIR
+  value: "demo-apps/petstore"
   required: true
 - name: DEV_DEVELOPER_ACCOUNT_ID
   value: "6"

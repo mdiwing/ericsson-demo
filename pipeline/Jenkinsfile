@@ -18,6 +18,27 @@ node("maven") {
     checkout scm
   }
 
+  stage("Deploy Application in Dev") {
+    openshift.withCluster() {
+      openshift.withProject(params.DEV_PROJECT) {
+        def bc = openshift.newApp('registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~${params.GIT_REPO} --context-dir='+params.APPLICATION_GIT_CONTEXT_DIR+' --name='+params.DEV_PROJECT).narrow('bc')
+        def build = bc.related('builds')
+        timeout(10) {
+          builds.untilEach(1) {
+              return it.object().status.phase == "Complete"
+          }
+        }
+
+        def rm = openshift.selector('dc', params.DEV_PROJECT).rollout()
+        timeout(5) {
+          openshift.selector('dc').related('pods').untilEach(1) {
+            return (it.object().status.phase == "Running")
+          } 
+        }
+      }
+    }
+  }
+
   stage("Deploy API in Dev") {
 
     // create the ThreescaleService object from your API metadata manifest:
