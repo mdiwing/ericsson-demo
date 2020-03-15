@@ -29,6 +29,8 @@ node("maven") {
           bc = openshift.newApp('registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~'+params.GIT_REPO+' --context-dir='+params.APPLICATION_GIT_CONTEXT_DIR+' --name='+params.DEV_PROJECT).narrow('bc')
         }
 
+        sleep(time: 5, unit: 'SECONDS')
+
         def builds = bc.related('builds')
         timeout(time: 10, unit: 'MINUTES') {
           builds.untilEach(1) {
@@ -119,6 +121,8 @@ try {
           openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':test --name='+params.TEST_PROJECT)
         }
 
+        sleep(time: 5, unit: 'SECONDS')
+
         def latestDeploymentVersion = openshift.selector('dc',params.TEST_PROJECT).object().status.latestVersion
         def rc = openshift.selector('rc', params.TEST_PROJECT+'-'+latestDeploymentVersion)
 
@@ -200,6 +204,8 @@ try {
         if (!dc.exists()) {
           openshift.newApp(params.DEV_PROJECT+'/'+params.DEV_PROJECT+':prod --name='+params.PROD_PROJECT)
         }
+
+        sleep(time: 5, unit: 'SECONDS')
 
         def latestDeploymentVersion = openshift.selector('dc',params.PROD_PROJECT).object().status.latestVersion
         def rc = openshift.selector('rc', params.PROD_PROJECT+'-'+latestDeploymentVersion)
