@@ -10,12 +10,35 @@ import static org.hamcrest.CoreMatchers.is;
 public class PetResourceTest {
 
     @Test
-    public void testHelloEndpoint() {
+    public void testGetPetsEndpoint() {
         given()
-          .when().get("/hello")
+          .when()
+            .get("/api/pets")
           .then()
-             .statusCode(200)
-             .body(is("hello"));
+             .statusCode(200);
+    }
+
+    @Test
+    public void testCreatePetEndpoint() {
+        given()
+          .when()
+            .contentType("application/json")
+            .accept("text/plain")
+            .body("{\"id\": 1, \"name\": \"Dog\"}")
+            .post("/api/pets")
+          .then()
+             .statusCode(200);
+    }
+
+    @Test
+    public void testDeletePetEndpoint() {
+        given()
+          .when()
+            .contentType("application/json")
+            .accept("text/plain")
+            .delete("/api/pets/1")
+          .then()
+             .statusCode(200);
     }
 
 }
