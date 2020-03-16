@@ -1,12 +1,5 @@
 Feature: Petstore
 
-Scenario: Get all pets, authorized
-
-Given url baseUrl + '/api/pets'
-And header api-key = apiKey
-When method get
-Then status 200
-
 Scenario: Create pets
 
 Given url baseUrl + '/api/pets'
@@ -44,4 +37,11 @@ Scenario: Delete pet
 Given url baseUrl + '/api/pets/5'
 And header api-key = apiKey
 When method delete
+Then status 200
+
+Scenario: Get pets
+
+Given url baseUrl + '/api/pets'
+And header api-key = apiKey
+When method get
 Then status 200

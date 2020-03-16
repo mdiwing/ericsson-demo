@@ -52,7 +52,19 @@ public class PetResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public Response createPet(Pet pet) {
-        pets.add(pet);
+
+        boolean found = false;
+
+        for (int i=0; i < pets.size(); i++) {
+            if (pets.get(i).getId() == pet.getId()) {
+                found = true;
+                break;
+            }
+        }
+ 
+        if (!found) {
+          pets.add(pet);
+        }
         
         return Response.ok().build();
     }
